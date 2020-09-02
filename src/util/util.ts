@@ -7,8 +7,8 @@ import Jimp = require('jimp');
 //    inputURL: string - a publicly accessible url to an image file
 // RETURNS
 //    a filtered JPEG image as buffer
-export async function filterImageFromURL(inputURL: string, greyscale: boolean = false,
-    w: number = Jimp.AUTO, h: number = Jimp.AUTO): Promise<Buffer> {
+export async function filterImageFromURL(inputURL: string, greyscale: boolean = true,
+    w: number = 256, h: number = Jimp.AUTO): Promise<Buffer> {
 
     let photo = await Jimp.read(inputURL);
 
