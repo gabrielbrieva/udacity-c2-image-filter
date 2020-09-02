@@ -1,4 +1,3 @@
-import fs from 'fs';
 import Jimp = require('jimp');
 
 // filterImageFromURL
@@ -7,28 +6,20 @@ import Jimp = require('jimp');
 // INPUTS
 //    inputURL: string - a publicly accessible url to an image file
 // RETURNS
-//    an absolute path to a filtered image locally saved file
-export async function filterImageFromURL(inputURL: string): Promise<string>{
-    return new Promise( async resolve => {
-        const photo = await Jimp.read(inputURL);
-        const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
-        await photo
-        .resize(256, 256) // resize
-        .quality(60) // set JPEG quality
-        .greyscale() // set greyscale
-        .write(__dirname+outpath, (img)=>{
-            resolve(__dirname+outpath);
-        });
-    });
-}
+//    a filtered JPEG image as buffer
+export async function filterImageFromURL(inputURL: string, greyscale: boolean = false,
+    w: number = Jimp.AUTO, h: number = Jimp.AUTO): Promise<Buffer> {
 
-// deleteLocalFiles
-// helper function to delete files on the local disk
-// useful to cleanup after tasks
-// INPUTS
-//    files: Array<string> an array of absolute paths to files
-export async function deleteLocalFiles(files:Array<string>){
-    for( let file of files) {
-        fs.unlinkSync(file);
-    }
+    let photo = await Jimp.read(inputURL);
+
+    // resize
+    if (w > Jimp.AUTO || h > Jimp.AUTO)
+        photo = photo.resize(w, h);
+
+    if (greyscale)
+        photo = photo.grayscale();
+
+    return await photo
+        .quality(75) // set JPEG quality
+        .getBufferAsync(Jimp.MIME_JPEG);
 }
