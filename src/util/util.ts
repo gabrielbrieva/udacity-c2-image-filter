@@ -1,8 +1,7 @@
 import Jimp = require('jimp');
 
 // filterImageFromURL
-// helper function to download, filter, and save the filtered image locally
-// returns the absolute path to the local image
+// helper function to download, filter, and return the filtered image
 // INPUTS
 //    inputURL: string - a publicly accessible url to an image file
 // RETURNS
