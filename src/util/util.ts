@@ -10,7 +10,7 @@ import Jimp = require('jimp');
 export async function filterImageFromURL(inputURL: string, greyscale: boolean = true,
     w: number = 256, h: number = Jimp.AUTO): Promise<Buffer> {
 
-    let photo = await Jimp.read(inputURL);
+    let photo: Jimp = await Jimp.read(inputURL);
 
     // resize
     if (w > Jimp.AUTO || h > Jimp.AUTO)
