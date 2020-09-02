@@ -10,16 +10,21 @@ import Jimp = require('jimp');
 export async function filterImageFromURL(inputURL: string, greyscale: boolean = true,
     w: number = 256, h: number = Jimp.AUTO): Promise<Buffer> {
 
-    let photo: Jimp = await Jimp.read(inputURL);
+    try {
+        let photo: Jimp = await Jimp.read(inputURL);
 
-    // resize
-    if (w > Jimp.AUTO || h > Jimp.AUTO)
-        photo = photo.resize(w, h);
+        // resize
+        if (w > Jimp.AUTO || h > Jimp.AUTO)
+            photo = photo.resize(w, h);
 
-    if (greyscale)
-        photo = photo.grayscale();
+        if (greyscale)
+            photo = photo.grayscale();
 
-    return await photo
-        .quality(75) // set JPEG quality
-        .getBufferAsync(Jimp.MIME_JPEG);
+        return await photo
+            .quality(75) // set JPEG quality
+            .getBufferAsync(Jimp.MIME_JPEG);
+
+    } catch {
+        return null;
+    }
 }

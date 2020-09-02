@@ -31,8 +31,14 @@ import { filterImageFromURL } from './util/util';
     if (height)
       height = parseInt(height);
 
-    res.set("Content-Type", "image/jpeg");
-    res.send(await filterImageFromURL(image_url, greyscale, width, height));
+    const imgBuffer: Buffer = await filterImageFromURL(image_url, greyscale, width, height);
+
+    if (imgBuffer) {
+      res.set("Content-Type", "image/jpeg");
+      res.send(imgBuffer);
+    } else {
+      res.status(404).send();
+    }
   });
   
   // Root Endpoint
